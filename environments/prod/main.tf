@@ -88,6 +88,12 @@ module "eks" {
   aws_auth_users                = var.aws_auth_users
   tags                          = local.tags
 
+  # EKS Auto Mode Configuration
+  enable_auto_mode              = var.enable_auto_mode
+  auto_mode_instance_types      = var.auto_mode_instance_types
+  auto_mode_min_capacity        = var.auto_mode_min_capacity
+  auto_mode_max_capacity        = var.auto_mode_max_capacity
+
   depends_on = [module.security]
 }
 
