@@ -59,3 +59,13 @@ output "eks_managed_node_groups" {
   description = "Map of attribute maps for all EKS managed node groups created"
   value       = module.eks.eks_managed_node_groups
 }
+
+output "eks_auto_mode_enabled" {
+  description = "Whether EKS Auto Mode is enabled (not yet supported)"
+  value       = false  # EKS Auto Mode not yet supported in current module version
+}
+
+output "eks_auto_mode_config" {
+  description = "EKS Auto Mode configuration (not yet supported)"
+  value       = null  # EKS Auto Mode not yet supported in current module version
+}

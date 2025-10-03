@@ -79,3 +79,14 @@ output "estimated_monthly_cost" {
   description = "Estimated monthly cost for development environment"
   value       = "~$15-25 USD (t3.small, single NAT gateway, minimal nodes)"
 }
+
+# EKS Auto Mode outputs
+output "eks_auto_mode_enabled" {
+  description = "Whether EKS Auto Mode is enabled"
+  value       = module.eks.eks_auto_mode_enabled
+}
+
+output "eks_auto_mode_config" {
+  description = "EKS Auto Mode configuration"
+  value       = module.eks.eks_auto_mode_config
+}

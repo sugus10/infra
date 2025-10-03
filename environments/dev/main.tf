@@ -84,9 +84,13 @@ module "eks" {
   node_group_desired_size       = var.node_group_desired_size
   node_group_security_group_id  = ""  # Will be created by EKS module
   kms_key_arn                   = module.security.kms_key_arn
-  aws_auth_roles                = var.aws_auth_roles
-  aws_auth_users                = var.aws_auth_users
   tags                          = local.tags
+
+  # EKS Auto Mode Configuration
+  enable_auto_mode              = var.enable_auto_mode
+  auto_mode_instance_types      = var.auto_mode_instance_types
+  auto_mode_min_capacity        = var.auto_mode_min_capacity
+  auto_mode_max_capacity        = var.auto_mode_max_capacity
 
   depends_on = [module.security]
 }

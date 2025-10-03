@@ -98,6 +98,31 @@ variable "budget_limit" {
   default     = 25  # Lower budget for dev
 }
 
+# EKS Auto Mode Configuration
+variable "enable_auto_mode" {
+  description = "Enable EKS Auto Mode instead of managed node groups"
+  type        = bool
+  default     = false  # Default to traditional mode for dev
+}
+
+variable "auto_mode_instance_types" {
+  description = "Instance types for EKS Auto Mode"
+  type        = list(string)
+  default     = ["t3.small"]
+}
+
+variable "auto_mode_min_capacity" {
+  description = "Minimum capacity for EKS Auto Mode"
+  type        = number
+  default     = 1
+}
+
+variable "auto_mode_max_capacity" {
+  description = "Maximum capacity for EKS Auto Mode"
+  type        = number
+  default     = 3
+}
+
 # Additional tags
 variable "tags" {
   description = "A map of tags to assign to the resource"

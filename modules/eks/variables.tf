@@ -61,28 +61,35 @@ variable "kms_key_arn" {
   type        = string
 }
 
-variable "aws_auth_roles" {
-  description = "List of role maps to add to the aws-auth configmap"
-  type = list(object({
-    rolearn  = string
-    username = string
-    groups   = list(string)
-  }))
-  default = []
-}
-
-variable "aws_auth_users" {
-  description = "List of user maps to add to the aws-auth configmap"
-  type = list(object({
-    userarn  = string
-    username = string
-    groups   = list(string)
-  }))
-  default = []
-}
+# aws_auth variables removed in version 20.0+ - managed differently
 
 variable "tags" {
   description = "A map of tags to assign to the resource"
   type        = map(string)
   default     = {}
+}
+
+# EKS Auto Mode Configuration
+variable "enable_auto_mode" {
+  description = "Enable EKS Auto Mode instead of managed node groups"
+  type        = bool
+  default     = false
+}
+
+variable "auto_mode_instance_types" {
+  description = "Instance types for EKS Auto Mode (only used when enable_auto_mode is true)"
+  type        = list(string)
+  default     = ["t3.medium"]
+}
+
+variable "auto_mode_min_capacity" {
+  description = "Minimum capacity for EKS Auto Mode (only used when enable_auto_mode is true)"
+  type        = number
+  default     = 1
+}
+
+variable "auto_mode_max_capacity" {
+  description = "Maximum capacity for EKS Auto Mode (only used when enable_auto_mode is true)"
+  type        = number
+  default     = 10
 }
