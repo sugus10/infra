@@ -65,25 +65,7 @@ variable "node_group_desired_size" {
 }
 
 # Security Configuration
-variable "aws_auth_roles" {
-  description = "List of role maps to add to the aws-auth configmap"
-  type = list(object({
-    rolearn  = string
-    username = string
-    groups   = list(string)
-  }))
-  default = []
-}
-
-variable "aws_auth_users" {
-  description = "List of user maps to add to the aws-auth configmap"
-  type = list(object({
-    userarn  = string
-    username = string
-    groups   = list(string)
-  }))
-  default = []
-}
+# Note: aws-auth management is now handled by the EKS module in version 20.0+
 
 # Cost Monitoring
 variable "budget_alert_email" {
