@@ -33,11 +33,8 @@ module "eks" {
     }
   }
 
-  # Enable cluster addons
+  # Enable cluster addons (EBS CSI Driver disabled for cost optimization)
   cluster_addons = {
-    aws-ebs-csi-driver = {
-      most_recent = true
-    }
     coredns = {
       most_recent = true
     }
@@ -47,6 +44,10 @@ module "eks" {
     vpc-cni = {
       most_recent = true
     }
+    # EBS CSI Driver disabled - not needed for stateless applications
+    # aws-ebs-csi-driver = {
+    #   most_recent = true
+    # }
   }
 
   # Enable EKS control plane logging
