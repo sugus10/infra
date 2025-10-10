@@ -3,8 +3,8 @@
 
 # EKS Cluster
 module "eks" {
-  source = "terraform-aws-modules/eks/aws"
-  version = "~> 20.0"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "~> 20.37"  # Stable version with EKS Auto Mode support
 
   cluster_name    = var.cluster_name
   cluster_version = var.kubernetes_version
@@ -24,11 +24,17 @@ module "eks" {
       max_size     = var.node_group_max_size
       desired_size = var.node_group_desired_size
 
-      # Enable cluster autoscaler
-      labels = {
+      # Spot instances for cost optimization
+      capacity_type = var.enable_spot_instances ? "SPOT" : "ON_DEMAND"
+
+      # Enable cluster autoscaler with Spot instance labels
+      labels = merge({
         "cluster-autoscaler/enabled" = "true"
         "cluster-autoscaler/cluster" = var.cluster_name
-      }
+        }, var.enable_spot_instances ? {
+        "node.kubernetes.io/lifecycle" = "spot"
+        "karpenter.sh/capacity-type"   = "spot"
+      } : {})
 
     }
   }
@@ -60,8 +66,8 @@ module "eks" {
   ]
 
   # CloudWatch Log Group
-  create_cloudwatch_log_group = true
-  cloudwatch_log_group_retention_in_days = 7  # Cost optimization: 7 days retention
+  create_cloudwatch_log_group            = true
+  cloudwatch_log_group_retention_in_days = 7 # Cost optimization: 7 days retention
 
   # Security hardening
   cluster_encryption_config = {
@@ -71,6 +77,12 @@ module "eks" {
 
   # Enable IRSA (IAM Roles for Service Accounts)
   enable_irsa = true
+
+  # EKS Auto Mode Configuration (when enabled)
+  cluster_compute_config = var.enable_auto_mode ? {
+    enabled    = true
+    node_pools = ["general-purpose"]
+  } : null
 
   # aws-auth configmap is now managed separately in version 20.0+
 

@@ -35,7 +35,6 @@ show_usage() {
     echo ""
     echo "Environments:"
     echo "  dev       - Development environment"
-    echo "  staging   - Staging environment"
     echo "  prod      - Production environment"
     echo ""
     echo "Actions:"

@@ -83,9 +83,9 @@ output "estimated_monthly_cost" {
 output "high_availability_features" {
   description = "High availability features enabled"
   value = {
-    multi_az_deployment = true
+    multi_az_deployment   = true
     multiple_nat_gateways = true
-    private_endpoint = true
-    minimum_nodes = 3
+    private_endpoint      = true
+    minimum_nodes         = 3
   }
 }

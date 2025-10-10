@@ -93,3 +93,22 @@ variable "auto_mode_max_capacity" {
   type        = number
   default     = 10
 }
+
+# Cost Optimization Variables
+variable "enable_spot_instances" {
+  description = "Enable Spot instances for cost optimization"
+  type        = bool
+  default     = false
+}
+
+variable "auto_shutdown_enabled" {
+  description = "Enable auto-shutdown for cost savings"
+  type        = bool
+  default     = false
+}
+
+variable "weekend_shutdown" {
+  description = "Enable weekend shutdown for additional cost savings"
+  type        = bool
+  default     = false
+}

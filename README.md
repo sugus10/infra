@@ -76,9 +76,8 @@ chmod +x deploy.sh
 
 | Environment | Monthly Cost | Instance Types | Nodes | NAT Gateways | Features |
 |-------------|--------------|----------------|-------|--------------|----------|
-| **Development** | ~$15-25 | t3.small | 1-3 | 1 | Public access, minimal resources |
-| **Staging** | ~$50-75 | t3.medium | 2-5 | 1 | Public access, moderate resources |
-| **Production** | ~$150-200 | t3.large/xlarge | 3-10 | 3 | Private access, high availability |
+| **Development** | ~$25 | t3.nano (Spot) | 1-2 | 1 | Public access, minimal resources, auto-shutdown |
+| **Production** | ~$75 | t3.small/medium | 2-5 | 1 | Private access, balanced resources |
 
 ## 🔧 **Configuration**
 
@@ -90,27 +89,21 @@ Each environment has its own `terraform.tfvars` file:
 ```hcl
 environment = "dev"
 vpc_cidr = "10.0.0.0/16"
-node_instance_types = ["t3.small"]
+node_instance_types = ["t3.nano"]
 node_group_desired_size = 1
 budget_limit = 25
-```
-
-**Staging** (`environments/staging/terraform.tfvars`):
-```hcl
-environment = "staging"
-vpc_cidr = "10.1.0.0/16"
-node_instance_types = ["t3.medium"]
-node_group_desired_size = 2
-budget_limit = 75
+enable_spot_instances = true
+auto_shutdown_enabled = true
 ```
 
 **Production** (`environments/prod/terraform.tfvars`):
 ```hcl
 environment = "prod"
 vpc_cidr = "10.2.0.0/16"
-node_instance_types = ["t3.large", "t3.xlarge"]
-node_group_desired_size = 3
-budget_limit = 200
+node_instance_types = ["t3.small", "t3.medium"]
+node_group_desired_size = 2
+budget_limit = 75
+enable_spot_instances = false
 ```
 
 ## 📚 **Documentation**

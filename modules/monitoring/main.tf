@@ -52,9 +52,9 @@ resource "aws_budgets_budget" "eks_cost" {
     for_each = var.budget_notifications
     content {
       comparison_operator        = notification.value.comparison_operator
-      threshold                 = notification.value.threshold
-      threshold_type            = notification.value.threshold_type
-      notification_type         = notification.value.notification_type
+      threshold                  = notification.value.threshold
+      threshold_type             = notification.value.threshold_type
+      notification_type          = notification.value.notification_type
       subscriber_email_addresses = notification.value.subscriber_email_addresses
     }
   }

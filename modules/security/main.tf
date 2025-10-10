@@ -20,7 +20,7 @@ resource "aws_kms_alias" "eks" {
 # Security Group for EKS Node Groups (only if cluster security group is provided)
 resource "aws_security_group" "node_group" {
   count = var.cluster_security_group_id != "" ? 1 : 0
-  
+
   name_prefix = "${var.name}-node-group-"
   vpc_id      = var.vpc_id
 
@@ -56,7 +56,7 @@ resource "aws_security_group" "node_group" {
 # Cluster Autoscaler IAM Role (only if OIDC provider is provided)
 resource "aws_iam_role" "cluster_autoscaler" {
   count = var.oidc_provider_arn != "" ? 1 : 0
-  
+
   name = "${var.name}-cluster-autoscaler"
 
   assume_role_policy = jsonencode({
@@ -83,7 +83,7 @@ resource "aws_iam_role" "cluster_autoscaler" {
 
 resource "aws_iam_role_policy" "cluster_autoscaler" {
   count = var.oidc_provider_arn != "" ? 1 : 0
-  
+
   name = "${var.name}-cluster-autoscaler"
   role = aws_iam_role.cluster_autoscaler[0].id
 
