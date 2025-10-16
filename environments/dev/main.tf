@@ -15,8 +15,8 @@ terraform {
 provider "aws" {
   region = var.aws_region
 
-  # Use sugu account profile for testing
-  profile = "sugu"
+  # Use test account profile for testing
+  profile = "test"
 
   default_tags {
     tags = {
@@ -24,7 +24,7 @@ provider "aws" {
       Project     = var.project_name
       ManagedBy   = "terraform"
       Owner       = var.owner
-      Account     = "sugu"
+      Account     = "test"
     }
   }
 }

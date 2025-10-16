@@ -1,0 +1,42 @@
+# ArgoCD Helm Values for EKS Deployment
+# This file contains the configuration values for ArgoCD deployment
+
+global:
+  domain: argocd.seabed2crest.com
+  image:
+    repository: quay.io/argoproj/argocd
+    tag: "v2.10.4"
+
+server:
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false  # We're using Traefik IngressRoute instead
+  extraArgs:
+    - --insecure  # For development
+  config:
+    url: https://argocd.seabed2crest.com
+    application.instanceLabelKey: argocd.argoproj.io/instance
+
+configs:
+  secret:
+    extra:
+      admin.password: "$2a$10$rRyBsGSHK6.uc8fntPwVFOBqGQ8k7XfOgV4cB5upR0SdSgVqQzQzQ"  # Default password
+      admin.passwordMtime: "'2023-07-01T00:00:00Z'"
+
+# Enable metrics
+controller:
+  metrics:
+    enabled: true
+    service:
+      enabled: true
+
+# Enable notifications
+notifications:
+  enabled: true
+
+# Redis configuration
+redis:
+  enabled: true
+  metrics:
+    enabled: true

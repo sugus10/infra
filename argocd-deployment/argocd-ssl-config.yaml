@@ -1,0 +1,88 @@
+# ============================================
+# ARGOCD WITH SSL CONFIGURATION
+# ============================================
+# Complete configuration for ArgoCD with Let's Encrypt SSL certificates
+# Domain: argocd.seabed2crest.com
+# Email: sugugalag@gmail.com
+
+# 1. Let's Encrypt Production ClusterIssuer
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: sugugalag@gmail.com  # Replace with your email
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - http01:
+        ingress:
+          class: traefik
+
+# 2. ArgoCD SSL Certificate
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-cert
+  namespace: argocd
+spec:
+  secretName: argocd-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - argocd.seabed2crest.com
+
+# 3. HTTPS IngressRoute for ArgoCD
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-server
+  namespace: argocd
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`argocd.seabed2crest.com`)
+    kind: Rule
+    services:
+    - name: argocd-server
+      port: 80
+  tls:
+    secretName: argocd-tls
+
+# 4. HTTP to HTTPS Redirect IngressRoute
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd-server-http
+  namespace: argocd
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`argocd.seabed2crest.com`)
+    kind: Rule
+    services:
+    - name: argocd-server
+      port: 80
+    middlewares:
+    - name: redirect-to-https
+
+# 5. HTTPS Redirect Middleware
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-to-https
+  namespace: argocd
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
